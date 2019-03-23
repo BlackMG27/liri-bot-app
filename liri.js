@@ -99,11 +99,16 @@ function concertThis() {
     console.log(concertURL);
     axios.get(concertURL)
         .then(function (response) {
-            console.log(response.data);
-            console.log('--------------------------------');
-            console.log(response.data[0].venue.name);
-            console.log(moment(response.data[0].datetime).format('MM/DD/YYYY'));
-            console.log(`${response.data[0].venue.city}, ${response.data[0].venue.region}, ${response.data[0].venue.country}`);
+
+            for (art in response.data) {
+                console.log(response.data[art].venue.name);
+                console.log(moment(response.data[art].datetime).format('MM/DD/YYYY'));
+                console.log(`${response.data[art].venue.city}, ${response.data[art].venue.region}, ${response.data[art].venue.country}`);
+                console.log('----------------------------------------------------');
+            }
+
+
+
         })
         .catch(function (error) {
             console.log(error);
