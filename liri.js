@@ -33,16 +33,18 @@ switch (liriCommand) {
         doWhatItSays();
         break;
 }
-
+//spotify function
 function spotifyThisSong() {
+    //searches spotify 
     spotify.search({
         type: 'track',
         query: liriChoice
     }, function (err, data) {
+        //catches the error
         if (err) {
             return console.log('Error occurred: ' + err);
         }
-
+        //gets the specific data 
         console.log(data);
         console.log('--------------------------------')
         console.log(data.tracks.items[0]);
@@ -55,15 +57,57 @@ function spotifyThisSong() {
 }
 
 function movieThis() {
+    //console.log(liriChoice);
+    liriChoice = liriChoice.replace(/ /g, '+');
+    var movieURL = `https://www.omdbapi.com/?t=${liriChoice}&y=&plot=short&apikey=trilogy`;
+    //console.log(movieURL);
+    axios.get(movieURL)
+        .then(function (response) {
+            /*
+             * Title of the movie.
+             *Year the movie came out.
+             *Movie Director
+             *IMDB Rating of the movie.
+             *Rotten Tomatoes Rating of the movie.
+             *Country where the movie was produced.
+             *Language of the movie.
+             *Plot of the movie.
+             *Actors in the movie.
+             */
+            console.log(`Movie Title: ${response.data.Title}`);
+            console.log(`Year Released: ${response.data.Year}`);
+            console.log(`Movie Director(s): ${response.data.Director}`)
+            console.log(`IMDB Rating: ${response.data.Ratings[0].Value}`);
+            console.log(`Rotten Tomatoes Rating: ${response.data.Ratings[1].Value}`);
+            console.log(`Movie Language: ${response.data.Language}`);
+            console.log(`Movie Actor(s): ${response.data.Actors}`);
+            console.log(`Movie Plot: ${response.data.Plot}`);
+        })
+        .catch(function (error) {
+            console.log(`An error occurred: ${error}`);
+        });
+}
+
+function concertThis() {
     console.log(liriChoice);
+    liriChoice = liriChoice.replace(/ /g, '%20');
+    var concertURL = `https://rest.bandsintown.com/artists/${liriChoice}/events?app_id=e0fa108c-68a4-472d-90fc-7da6bc210785`;
+    console.log(concertURL);
+    axios.get(concertURL)
+        .then(function (response) {
+            console.log(response.data);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
 }
 
 //cond(concert-this)
 //function concert
 //cond(movie-this)
-//function movie
+//function movieThis
 //cond(spotify-this-song)
-//function spotifySong
+//function spotifyThisSong
 //cond(do-what-this-says)
 //function doWhatThisSays
 
