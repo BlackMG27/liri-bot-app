@@ -1,10 +1,14 @@
 //[dotenv]
+//get the variables 
 require('dotenv').config();
 var Spotify = require('node-spotify-api');
 var keys = require('./keys');
 var spotify = new Spotify(keys.spotify);
 var axios = require('axios');
-
+var moment = require('moment');
+//get the user input 
+var liriCommand = process.argv[2];
+var liriChoice = process.argv.slice(3).join(" ");
 
 
 //var spotify = new Spotify(keys,spotify)
@@ -13,9 +17,8 @@ var axios = require('axios');
 //process argv or inquirer
 // var liriCommmand = process.argv;
 // li
-var liriCommand = process.argv[2];
+
 // node liri.js spotify-this-song All The Small Things
-var liriChoice = process.argv.slice(3).join(" ");
 //store in userChoice
 //chekc for user command 
 //if or switch
@@ -57,8 +60,9 @@ function spotifyThisSong() {
 }
 
 function movieThis() {
-    //console.log(liriChoice);
+    console.log(liriChoice);
     liriChoice = liriChoice.replace(/ /g, '+');
+    console.log(liriChoice);
     var movieURL = `https://www.omdbapi.com/?t=${liriChoice}&y=&plot=short&apikey=trilogy`;
     //console.log(movieURL);
     axios.get(movieURL)
@@ -96,6 +100,10 @@ function concertThis() {
     axios.get(concertURL)
         .then(function (response) {
             console.log(response.data);
+            console.log('--------------------------------');
+            console.log(response.data[0].venue.name);
+            console.log(moment(response.data[0].datetime).format('MM/DD/YYYY'));
+            console.log(`${response.data[0].venue.city}, ${response.data[0].venue.region}, ${response.data[0].venue.country}`);
         })
         .catch(function (error) {
             console.log(error);
