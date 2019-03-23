@@ -6,22 +6,12 @@ var keys = require('./keys');
 var spotify = new Spotify(keys.spotify);
 var axios = require('axios');
 var moment = require('moment');
+var fs = require('fs');
 //get the user input 
 var liriCommand = process.argv[2];
 var liriChoice = process.argv.slice(3).join(" ");
 
-
-//var spotify = new Spotify(keys,spotify)
-
-//User command choice
-//process argv or inquirer
-// var liriCommmand = process.argv;
-// li
-
-// node liri.js spotify-this-song All The Small Things
-//store in userChoice
-//chekc for user command 
-//if or switch
+//switch statement for liriCommands
 switch (liriCommand) {
     case 'spotify-this-song':
         spotifyThisSong();
@@ -55,14 +45,13 @@ function spotifyThisSong() {
         console.log(data.tracks.items[0].album.artists[0].name);
         console.log(data.tracks.items[0].album.name);
         //console.log(data.tracks.items[0].album.name);
-        console.log(data.tracks.items[0].album.preview_url);
+        console.log(data.tracks.items[0].album.duration_ms);
     });
 }
 
 function movieThis() {
-    console.log(liriChoice);
+    //formats liriChoice 
     liriChoice = liriChoice.replace(/ /g, '+');
-    console.log(liriChoice);
     var movieURL = `https://www.omdbapi.com/?t=${liriChoice}&y=&plot=short&apikey=trilogy`;
     //console.log(movieURL);
     axios.get(movieURL)
@@ -94,51 +83,53 @@ function movieThis() {
 
 function concertThis() {
     console.log(liriChoice);
+    //gets rid of the white spaces 
     liriChoice = liriChoice.replace(/ /g, '%20');
+    //sets up the api call
     var concertURL = `https://rest.bandsintown.com/artists/${liriChoice}/events?app_id=e0fa108c-68a4-472d-90fc-7da6bc210785`;
     console.log(concertURL);
+    //gets the ajax calls
     axios.get(concertURL)
+        //smacks the api and spits out the information 
         .then(function (response) {
-
+            //iterates through the information
             for (art in response.data) {
                 console.log(response.data[art].venue.name);
                 console.log(moment(response.data[art].datetime).format('MM/DD/YYYY'));
                 console.log(`${response.data[art].venue.city}, ${response.data[art].venue.region}, ${response.data[art].venue.country}`);
                 console.log('----------------------------------------------------');
             }
-
-
-
         })
+        //catches the error
         .catch(function (error) {
-            console.log(error);
+            console.log(`An error occurred: ${error}`);
         });
 }
 
-//cond(concert-this)
-//function concert
-//cond(movie-this)
-//function movieThis
-//cond(spotify-this-song)
-//function spotifyThisSong
-//cond(do-what-this-says)
-//function doWhatThisSays
+function doWhatItSays() {
+    fs.readFile('./random.txt', 'utf8', function (error, data) {
+        if (error) {
+            console.log(`Error has occurred: ${error}`);
+        } else {
+            //splits the data into an array
+            var whatSays = data.split(', ');
+            //sets the liriCommand
+            liriCommand = whatSays[0];
+            //sets the liriChoice
+            liriChoice = whatSays.slice(1).join(' ');
+            //commands based on the liriCommand 
+            switch (liriCommand) {
+                case 'spotify-this-song':
+                    spotifyThisSong();
+                    break;
+                case 'movie-this':
+                    movieThis();
+                    break;
+                case 'concert-this':
+                    concertThis();
+                    break;
+            }
 
-//function concert(userChoice)
-//have to use axios
-//store in concertURL
-//store results in result
-//print the venue name, location and date (use moment.js ("MM/DD/YYYY"))
-
-//function doWhatItSays()
-//fs.readFile 
-//split the string
-//data.split()
-//get the second value 
-//data[1]
-//check for the first command
-//data[0]
-//run the appropriate function
-
-//function spotify()
-//
+        }
+    })
+}
