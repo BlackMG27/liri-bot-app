@@ -52,21 +52,12 @@ function spotifyThisSong() {
 function movieThis() {
     //formats liriChoice 
     liriChoice = liriChoice.replace(/ /g, '+');
+    //puts liriChoice in the movie URL
     var movieURL = `https://www.omdbapi.com/?t=${liriChoice}&y=&plot=short&apikey=trilogy`;
-    //console.log(movieURL);
+    //calls axios to get the api data
     axios.get(movieURL)
         .then(function (response) {
-            /*
-             * Title of the movie.
-             *Year the movie came out.
-             *Movie Director
-             *IMDB Rating of the movie.
-             *Rotten Tomatoes Rating of the movie.
-             *Country where the movie was produced.
-             *Language of the movie.
-             *Plot of the movie.
-             *Actors in the movie.
-             */
+            //gets the movie info
             console.log(`Movie Title: ${response.data.Title}`);
             console.log(`Year Released: ${response.data.Year}`);
             console.log(`Movie Director(s): ${response.data.Director}`)
@@ -108,6 +99,7 @@ function concertThis() {
 
 function doWhatItSays() {
     fs.readFile('./random.txt', 'utf8', function (error, data) {
+        //if there's an error
         if (error) {
             console.log(`Error has occurred: ${error}`);
         } else {
