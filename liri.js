@@ -94,9 +94,9 @@ function concertThis() {
             //iterates through the information
             for (art in response.data) {
                 console.log('----------------------------------------------------');
-                console.log(response.data[art].venue.name);
-                console.log(moment(response.data[art].datetime).format('MM/DD/YYYY'));
-                console.log(`${response.data[art].venue.city}, ${response.data[art].venue.region}, ${response.data[art].venue.country}`);
+                console.log(`Venue Name: ${response.data[art].venue.name}`);
+                console.log(`Venue Date: ${moment(response.data[art].datetime).format('MM/DD/YYYY')}`);
+                console.log(`Venue Location: ${response.data[art].venue.city}, ${response.data[art].venue.region}, ${response.data[art].venue.country}`);
                 console.log('----------------------------------------------------');
             }
         })
@@ -111,7 +111,7 @@ function doWhatItSays() {
         .readFile('./random.txt', 'utf8', function (error, data) {
             //if there's an error
             if (error) {
-                console.log(`Error has occurred: ${error}`);
+                console.log(`An error has occurred: ${error}`);
             } else {
                 //splits the data into an array
                 var whatSays = data.split(', ');
