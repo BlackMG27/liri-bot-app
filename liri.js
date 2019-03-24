@@ -48,6 +48,7 @@ function spotifyThisSong() {
                 console.log(`Artist Name: ${data.tracks.items[song].album.artists[0].name}`);
                 console.log(`Album Name: ${data.tracks.items[song].album.name}`);
                 console.log(`Song Name: ${data.tracks.items[song].name}`);
+                console.log(`Album Release Date: ${moment(data.tracks.items[song].album.release_date).format('MM/DD/YYYY')}`);
                 console.log(`Song Preview: ${data.tracks.items[song].preview_url}`);
                 console.log('----------------------------------------------------------');
             }
