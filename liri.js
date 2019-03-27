@@ -31,17 +31,16 @@ switch (liriCommand) {
 //spotify function
 function spotifyThisSong() {
     //checks to see if the user entered something
-    if (!process.argv[3]) {
+    if (!liriChoice) {
         //sets liriChoice to default
         liriChoice = 'The Sign';
     }
     console.log(liriChoice);
-    console.log(`Someting shoul be here`);
-
     //searches spotify
     spotify.search({
         type: 'track',
-        query: liriChoice
+        query: liriChoice,
+        limit: 9
     }, function (err, data) {
         //catches the error
         if (err) {
@@ -59,11 +58,12 @@ function spotifyThisSong() {
             console.log('----------------------------------------------------------');
         }
 
+
     });
 }
 
 function movieThis() {
-    if (!process.argv[3]) {
+    if (!liriChoice) {
         liriChoice = `Mr. Nobody`;
     }
     //formats liriChoice
@@ -117,6 +117,7 @@ function concertThis() {
 }
 
 function doWhatItSays() {
+
     fs
         .readFile('./random.txt', 'utf8', function (error, data) {
             //if there's an error
@@ -125,12 +126,15 @@ function doWhatItSays() {
             } else {
                 //splits the data into an array
                 var whatSays = data.split(', ');
+                console.log(whatSays);
                 //sets the liriCommand
                 liriCommand = whatSays[0];
                 //sets the liriChoice
                 liriChoice = whatSays
                     .slice(1)
                     .join(' ');
+                //gets rid of the quotations
+                liriChoice = liriChoice.replace(/"/g, / /);
                 //commands based on the liriCommand
                 switch (liriCommand) {
                     case 'spotify-this-song':
